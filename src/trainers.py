@@ -105,10 +105,14 @@ class PPOTrainer(Trainer):
         self.orig_sft_model = sft_model
         self.orig_reward_model = reward_model
 
-        self.actor = torch.compile(self.orig_actor)
-        self.critic = torch.compile(self.orig_critic)
-        self.sft_model = torch.compile(self.orig_sft_model)
-        self.reward_model = torch.compile(self.orig_reward_model)
+        # self.actor = torch.compile(self.orig_actor)
+        # self.critic = torch.compile(self.orig_critic)
+        # self.sft_model = torch.compile(self.orig_sft_model)
+        # self.reward_model = torch.compile(self.orig_reward_model)
+        self.actor = self.orig_actor
+        self.critic = self.orig_critic
+        self.sft_model = self.orig_sft_model
+        self.reward_model = self.orig_reward_model
         # Separate actor loss from critic loss to save optimizer memory
         self.actor_criterion = PolicyLoss()
         self.critic_criterion = ValueLoss()
@@ -365,7 +369,8 @@ class SFTTrainer(Trainer):
             self.model.freeze_weights(self.finetune_method)
         summary(self.model, input_data=torch.ones(1, 1024).long())
 
-        opt_model = torch.compile(self.model)
+        # opt_model = torch.compile(self.model)
+        opt_model = self.model
         opt_model.to(self.device)
         writer = SummaryWriter(f'./runs/{self.run_name}/logs', max_queue=40)
         scaler = GradScaler(enabled=self.dtype != torch.float32)
@@ -451,7 +456,8 @@ class RewardModelTrainer(Trainer):
             self.model.freeze_weights(self.finetune_method)
         summary(self.model, input_data=torch.ones(1, 1024).long())
 
-        opt_model = torch.compile(self.model)
+        # opt_model = torch.compile(self.model)
+        opt_model = self.model
         opt_model.to(self.device)
         writer = SummaryWriter(f'./runs/{self.run_name}/logs', max_queue=40)
         scaler = GradScaler(enabled=self.dtype != torch.float32)
@@ -585,7 +591,8 @@ class AcceleratorRewardModelTrainer(Trainer):
             self.model.freeze_weights(self.finetune_method)
         summary(self.model, input_data=torch.ones(1, 1024).long())
 
-        opt_model = torch.compile(self.model)
+        # opt_model = torch.compile(self.model)
+        opt_model = self.model
         opt_model.to(self.device)
 
         model_acc, optimizer_acc, train_dataloader, test_dataloader = accelerator.prepare(

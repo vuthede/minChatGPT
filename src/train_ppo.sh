@@ -1,0 +1,2 @@
+CUDA_VISIBLE_DEVICES=0 taskset --cpu-list 0-20 python3 train_ppo.py -n devu_gpt_ppo -a /home/ubuntu/vuthede/minChatGPT/src/runs/sft_devu_gpt_sft_202304080803/sft_devu_gpt_sft_202304080803_step180000.pt\
+                                                                    -c /home/ubuntu/vuthede/minChatGPT/src/runs/rm_devu_gpt_rm_202304090242/rm_devu_gpt_rm_202304090242_step60000.pt

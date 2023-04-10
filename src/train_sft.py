@@ -15,6 +15,7 @@ def train(pretrain, batch_size, exp_name):
     assert pretrain == "huggingface"
     cfg.exp_name = exp_name
 
+    cfg.hf_model = "/home/ubuntu/.cache/huggingface/hub/models--gpt2-medium/snapshots/425b0cc90498ac177aa51ba07be26fc2fea6af9d"
     model = GPT.from_pretrained(cfg)
     train_ds = EYLSFTStaticDataset(block_size=1024,
                                    split='train',

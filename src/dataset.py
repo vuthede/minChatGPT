@@ -1,5 +1,6 @@
 from torch.utils.data import Dataset, IterableDataset
-from datasets import load_dataset, Features
+from datasets import load_dataset, Features, load_from_disk
+from datasets import Dataset as DatasetHuggingFace
 from transformers import GPT2Tokenizer, GPT2TokenizerFast
 import torch
 from tqdm import tqdm
@@ -15,7 +16,11 @@ class DahoasSFTStaticPromptsDataset(Dataset):
                  max_examples=None,
                  tokenizer_name='tiktoken/gpt2') -> None:
         super().__init__()
-        dataset = load_dataset("Dahoas/rm-static", split="train")
+        # dataset = load_dataset(path="Dahoas/rm-static", split="train", download_model="offline")
+        dataset = DatasetHuggingFace.from_file('/home/ubuntu/.cache/huggingface/datasets/Dahoas___parquet/default-b9d2c4937d617106/0.0.0/2a3b91fbd88a2c90d1dbbb32b460cf621d31bd5b05b934492fdef7d8d6f236ec/parquet-train.arrow')
+        # dataset = load_from_disk("/home/ubuntu/.cache/huggingface/datasets/Dahoas___parquet/default-b9d2c4937d617106/0.0.0/2a3b91fbd88a2c90d1dbbb32b460cf621d31bd5b05b934492fdef7d8d6f236ec/")
+        
+
         self.prompts = []
 
         if tokenizer_name == "huggingface/gpt2":
@@ -167,7 +172,15 @@ class DahoasRMStaticDataset(Dataset):
                  max_examples=None,
                  tokenizer_name='tiktoken/gpt2') -> None:
         super().__init__()
-        dataset = load_dataset("Dahoas/rm-static", split=split)
+        # dataset = load_dataset("Dahoas/rm-static", split=split)
+
+        if split == 'train':
+            dataset = DatasetHuggingFace.from_file('/home/ubuntu/.cache/huggingface/datasets/Dahoas___parquet/default-b9d2c4937d617106/0.0.0/2a3b91fbd88a2c90d1dbbb32b460cf621d31bd5b05b934492fdef7d8d6f236ec/parquet-train.arrow')
+        
+        if split == 'test':
+            dataset = DatasetHuggingFace.from_file('/home/ubuntu/.cache/huggingface/datasets/Dahoas___parquet/default-b9d2c4937d617106/0.0.0/2a3b91fbd88a2c90d1dbbb32b460cf621d31bd5b05b934492fdef7d8d6f236ec/parquet-test.arrow')
+
+
         self.pairs = []
         self.masks = []
 

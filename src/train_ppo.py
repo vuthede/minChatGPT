@@ -7,7 +7,9 @@ from dataset import DahoasSFTStaticPromptsDataset
 
 
 def train(batch_size, exp_name, actor_weights, critic_weights):
-    cfg = get_configs("gpt2-medium")
+    # cfg = get_configs("gpt2-medium")
+    cfg = get_configs("gpt2-medium/dropout")
+
     cfg.actor_weights = actor_weights
     # 67% gpt2-medium sft lora
     cfg.critic_weights = critic_weights
@@ -24,7 +26,9 @@ def train(batch_size, exp_name, actor_weights, critic_weights):
     actor = GPTActor.from_checkpoint(cfg, cfg.actor_weights).cuda()
     sft_model = GPTActor.from_checkpoint(cfg, cfg.sft_model_weights).cuda()
 
-    cfg2 = get_configs("gpt2-medium/lora")
+    # cfg2 = get_configs("gpt2-medium/lora")
+    cfg2 = get_configs("gpt2-medium/dropout")
+
     critic = GPTCritic.from_checkpoint(cfg2, cfg.critic_weights).cuda()
     reward_model = GPTRewardModel.from_checkpoint(
         cfg2, cfg.reward_model_weights).cuda()

@@ -75,13 +75,17 @@ def train_accelerate():
 
 def train(pretrain, batch_size, exp_name):
     device = 'cuda'
-    cfg = get_configs("gpt2-medium/lora")
+    # cfg = get_configs("gpt2-medium/lora")
+    cfg = get_configs("gpt2-medium/dropout")
+
     cfg.batch_size = batch_size
     cfg.pretrain = pretrain
     cfg.total_epochs = 1
     cfg.exp_name = exp_name
 
     if pretrain == "huggingface":
+        # rm = GPTRewardModel.from_pretrained(cfg)
+        cfg.hf_model = "/home/ubuntu/.cache/huggingface/hub/models--gpt2-medium/snapshots/425b0cc90498ac177aa51ba07be26fc2fea6af9d"
         rm = GPTRewardModel.from_pretrained(cfg)
     else:
         rm = GPTRewardModel.from_backbone_checkpoint(cfg, pretrain)
